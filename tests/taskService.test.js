@@ -15,8 +15,8 @@ import {
 
 const mixtas = () => [
   {id: 1, titulo: "Revisar requisitos", completada: false},
-  {id: 2, titulo: "Disenar pruebas", completada: true},
-  {id: 3, titulo: "Refactorizar codiogo", completada: false}
+  {id: 2, titulo: "Diseñar pruebas", completada: true},
+  {id: 3, titulo: "Refactorizar código", completada: false}
 ]
 
 /*
@@ -72,15 +72,37 @@ describe("agregarTarea", () => {
     expect(tareas).toHaveLength(3);
   });
 });
+describe("buscarTarea", () => {
+  it("encuentra una tarea con id existente", () => {
+    // Arrange
+    const tareas = mixtas();
 
-// MISIÓN 4: prueba id existente e inexistente para buscarTarea().
+    // Act
+    const tarea = buscarTarea(tareas, 2);
+
+    // Assert
+    expect(tarea).toEqual({ id: 2, titulo: "Diseñar pruebas", completada: true });
+  });
+
+  it("devuelve undefined si el id no existe", () => {
+    const tareas = mixtas();
+
+    const tarea = buscarTarea(tareas, 99);
+
+    expect(tarea).toBeUndefined();
+  });
+
+  it("devuelve undefined en una colección vacía", () => {
+    expect(buscarTarea([], 1)).toBeUndefined();
+  });
+});
+
 // MISIÓN 5: prueba colección mixta, sin coincidencias y vacía.
 // MISIÓN 6: prueba cambio correcto, otra tarea intacta e id inexistente.
 // MISIÓN 7: prueba eliminar existente, inexistente y colección vacía.
 // MISIÓN 8: prueba obtenerResumen(), incluyendo colección vacía.
 
 // Los imports anteriores quedan preparados para que construyas la suite de forma incremental.
-void buscarTarea;
 void obtenerPendientes;
 void obtenerTerminadas;
 void cambiarEstado;
