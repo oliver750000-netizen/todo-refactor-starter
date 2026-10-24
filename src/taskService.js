@@ -32,8 +32,9 @@ export function obtenerTerminadas(tareas) {
 
 // MISIÓN 6
 export function cambiarEstado(tareas, id) {
-  // TODO: usar map() + spread. No mutar el objeto original.
-  throw new Error("Misión 6 pendiente: implementar cambiarEstado()");
+  return tareas.map((tarea) =>
+    tarea.id === id ? { ...tarea, completada: !tarea.completada } : tarea
+  );
 }
 
 // MISIÓN 7

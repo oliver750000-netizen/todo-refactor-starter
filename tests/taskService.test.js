@@ -126,11 +126,41 @@ describe("obtenerPendientes / obtenerTerminadas", () => {
   });
 });
 
-// MISIÓN 6: prueba cambio correcto, otra tarea intacta e id inexistente.
+describe("cambiarEstado", () => {
+  it("invierte completada de la tarea indicada", () => {
+    // Arrange
+    const tareas = mixtas();
+
+    // Act
+    const resultado = cambiarEstado(tareas, 1);
+
+    // Assert
+    expect(buscarTarea(resultado, 1).completada).toBe(true);
+  });
+
+  it("no altera las demás tareas", () => {
+    const resultado = cambiarEstado(mixtas(), 1);
+
+    expect(buscarTarea(resultado, 2)).toEqual({ id: 2, titulo: "Diseñar pruebas", completada: true });
+    expect(buscarTarea(resultado, 3)).toEqual({ id: 3, titulo: "Refactorizar código", completada: false });
+  });
+
+  it("con id inexistente conserva el contenido", () => {
+    expect(cambiarEstado(mixtas(), 99)).toEqual(mixtas());
+  });
+
+  it("no muta el objeto original", () => {
+    const tareas = mixtas();
+
+    cambiarEstado(tareas, 1);
+
+    expect(tareas[0].completada).toBe(false);
+  });
+});
+
 // MISIÓN 7: prueba eliminar existente, inexistente y colección vacía.
 // MISIÓN 8: prueba obtenerResumen(), incluyendo colección vacía.
 
 // Los imports anteriores quedan preparados para que construyas la suite de forma incremental.
-void cambiarEstado;
 void eliminarTarea;
 void obtenerResumen;
