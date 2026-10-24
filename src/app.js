@@ -33,6 +33,7 @@ function render() {
   summary.textContent = `Total: ${tareas.length}`;
 }
 
+
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const titulo = input.value.trim();
