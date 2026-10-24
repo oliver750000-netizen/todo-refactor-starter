@@ -13,8 +13,7 @@ export function crearTarea(id, titulo) {
 
 // MISIÓN 3
 export function agregarTarea(tareas, nuevaTarea) {
-  // TODO: devolver una NUEVA colección que incluya nuevaTarea.
-  throw new Error("Misión 3 pendiente: implementar agregarTarea()");
+  return [...tareas, nuevaTarea];
 }
 
 // MISIÓN 4
