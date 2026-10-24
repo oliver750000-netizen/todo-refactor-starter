@@ -158,9 +158,36 @@ describe("cambiarEstado", () => {
   });
 });
 
-// MISIÓN 7: prueba eliminar existente, inexistente y colección vacía.
+describe("eliminarTarea", () => {
+  it("elimina la tarea con id existente", () => {
+    // Arrange
+    const tareas = mixtas();
+
+    // Act
+    const resultado = eliminarTarea(tareas, 2);
+
+    // Assert
+    expect(resultado.map((t) => t.id)).toEqual([1, 3]);
+  });
+
+  it("con id inexistente deja la colección igual", () => {
+    expect(eliminarTarea(mixtas(), 99)).toEqual(mixtas());
+  });
+
+  it("con colección vacía devuelve []", () => {
+    expect(eliminarTarea([], 1)).toEqual([]);
+  });
+
+  it("no modifica el array original", () => {
+    const tareas = mixtas();
+
+    eliminarTarea(tareas, 1);
+
+    expect(tareas).toHaveLength(3);
+  });
+});
+
 // MISIÓN 8: prueba obtenerResumen(), incluyendo colección vacía.
 
 // Los imports anteriores quedan preparados para que construyas la suite de forma incremental.
-void eliminarTarea;
 void obtenerResumen;
