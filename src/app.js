@@ -8,8 +8,9 @@ import {
   cambiarEstado,
   eliminarTarea,
   obtenerResumen,
-  obtenerPendientes,
-  obtenerTerminadas
+  esTituloValido,
+  filtrarPorEstado,
+  siguienteId
 } from "./taskService.js";
 
 const form = document.querySelector("#task-form");
@@ -26,24 +27,33 @@ let tareas = [
 ];
 let filtro = "todas";
 
-function aplicarFiltro() {
-  if (filtro === "pendientes") return obtenerPendientes(tareas);
-  if (filtro === "terminadas") return obtenerTerminadas(tareas);
-  return tareas;
+function crearItem(tarea) {
+  const li = document.createElement("li");
+  li.className = tarea.completada ? "task done" : "task";
+
+  const titulo = document.createElement("span");
+  titulo.className = "title";
+  titulo.textContent = tarea.titulo;
+
+  const acciones = document.createElement("span");
+  acciones.className = "task-actions";
+
+  const botonEstado = document.createElement("button");
+  botonEstado.dataset.toggle = tarea.id;
+  botonEstado.textContent = tarea.completada ? "Reabrir" : "Completar";
+
+  const botonEliminar = document.createElement("button");
+  botonEliminar.dataset.delete = tarea.id;
+  botonEliminar.textContent = "Eliminar";
+
+  acciones.append(botonEstado, botonEliminar);
+  li.append(titulo, acciones);
+  return li;
 }
 
 function render() {
-  list.innerHTML = "";
-  aplicarFiltro().forEach((tarea) => {
-    const li = document.createElement("li");
-    li.className = tarea.completada ? "task done" : "task";
-    li.innerHTML = `<span class="title">${tarea.titulo}</span>
-      <span class="task-actions">
-        <button data-toggle="${tarea.id}">${tarea.completada ? "Reabrir" : "Completar"}</button>
-        <button data-delete="${tarea.id}">Eliminar</button>
-      </span>`;
-    list.appendChild(li);
-  });
+  const visibles = filtrarPorEstado(tareas, filtro);
+  list.replaceChildren(...visibles.map(crearItem));
 
   const { total, pendientes, terminadas } = obtenerResumen(tareas);
   summary.textContent = `Total: ${total} · Pendientes: ${pendientes} · Terminadas: ${terminadas}`;
@@ -51,13 +61,12 @@ function render() {
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  const titulo = input.value.trim();
-  if (!titulo) {
+  if (!esTituloValido(input.value)) {
     message.textContent = "Escribe un título antes de agregar.";
     return;
   }
-  const nuevoId = Math.max(0, ...tareas.map((t) => t.id)) + 1;
-  tareas = agregarTarea(tareas, crearTarea(nuevoId, titulo));
+  const nueva = crearTarea(siguienteId(tareas), input.value.trim());
+  tareas = agregarTarea(tareas, nueva);
   input.value = "";
   message.textContent = "";
   render();

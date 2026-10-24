@@ -7,10 +7,11 @@ import {
   obtenerTerminadas,
   cambiarEstado,
   eliminarTarea,
-  obtenerResumen
+  obtenerResumen,
+  esTituloValido,
+  filtrarPorEstado,
+  siguienteId
 } from "../src/taskService.js";
-
-
 
 
 const mixtas = () => [
@@ -207,5 +208,41 @@ describe("obtenerResumen", () => {
     const resumen = obtenerResumen(mixtas());
 
     expect(resumen.pendientes + resumen.terminadas).toBe(resumen.total);
+  });
+});   
+
+describe("esTituloValido", () => {
+  it("acepta un título con texto", () => {
+    expect(esTituloValido("Estudiar")).toBe(true);
+  });
+
+  it("rechaza vacío y solo espacios", () => {
+    expect(esTituloValido("")).toBe(false);
+    expect(esTituloValido("   ")).toBe(false);
+  });
+});
+
+describe("filtrarPorEstado", () => {
+  it("'todas' devuelve todo", () => {
+    expect(filtrarPorEstado(mixtas(), "todas")).toHaveLength(3);
+  });
+
+  it("'pendientes' devuelve solo las pendientes", () => {
+    expect(filtrarPorEstado(mixtas(), "pendientes").map((t) => t.id)).toEqual([1, 3]);
+  });
+
+  it("'terminadas' devuelve solo las terminadas", () => {
+    expect(filtrarPorEstado(mixtas(), "terminadas").map((t) => t.id)).toEqual([2]);
+  });
+});
+
+describe("siguienteId", () => {
+  it("devuelve 1 si no hay tareas", () => {
+    expect(siguienteId([])).toBe(1);
+  });
+
+  it("no reutiliza ids tras eliminar", () => {
+    const tareas = eliminarTarea(mixtas(), 2); 
+    expect(siguienteId(tareas)).toBe(4);
   });
 });

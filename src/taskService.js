@@ -50,3 +50,17 @@ export function obtenerResumen(tareas) {
     terminadas: obtenerTerminadas(tareas).length
   };
 }
+// mision 10
+export function esTituloValido(titulo) {
+  return typeof titulo === "string" && titulo.trim().length > 0;
+}
+
+export function filtrarPorEstado(tareas, filtro) {
+  if (filtro === "pendientes") return obtenerPendientes(tareas);
+  if (filtro === "terminadas") return obtenerTerminadas(tareas);
+  return tareas;
+}
+
+export function siguienteId(tareas) {
+  return tareas.reduce((max, tarea) => Math.max(max, tarea.id), 0) + 1;
+}
