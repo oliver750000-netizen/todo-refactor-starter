@@ -10,7 +10,8 @@ import {
   obtenerResumen,
   esTituloValido,
   filtrarPorEstado,
-  siguienteId
+  siguienteId,
+  buscarPorTexto
 } from "../src/taskService.js";
 
 
@@ -244,5 +245,33 @@ describe("siguienteId", () => {
   it("no reutiliza ids tras eliminar", () => {
     const tareas = eliminarTarea(mixtas(), 2); 
     expect(siguienteId(tareas)).toBe(4);
+  });
+});
+
+describe("buscarPorTexto", () => {
+  it("encuentra coincidencias parciales", () => {
+    const tareas = mixtas();
+    const resultado = buscarPorTexto(tareas, "prueb");
+    expect(resultado.map((t) => t.id)).toEqual([2]);
+  });
+
+  it("ignora mayúsculas y minúsculas", () => {
+    expect(buscarPorTexto(mixtas(), "REFACTOR").map((t) => t.id)).toEqual([3]);
+  });
+
+  it("ignora espacios al inicio y al final de la búsqueda", () => {
+    expect(buscarPorTexto(mixtas(), "  requisitos  ").map((t) => t.id)).toEqual([1]);
+  });
+
+  it("texto vacío devuelve todas las tareas", () => {
+    expect(buscarPorTexto(mixtas(), "")).toHaveLength(3);
+  });
+
+  it("sin coincidencias devuelve []", () => {
+    expect(buscarPorTexto(mixtas(), "zzz")).toEqual([]);
+  });
+
+  it("colección vacía devuelve []", () => {
+    expect(buscarPorTexto([], "a")).toEqual([]);
   });
 });

@@ -64,3 +64,10 @@ export function filtrarPorEstado(tareas, filtro) {
 export function siguienteId(tareas) {
   return tareas.reduce((max, tarea) => Math.max(max, tarea.id), 0) + 1;
 }
+
+// MISIÓN 11 · Opción B: buscar por texto
+export function buscarPorTexto(tareas, texto) {
+  const consulta = texto.trim().toLowerCase();
+  if (consulta === "") return tareas;
+  return tareas.filter((tarea) => tarea.titulo.toLowerCase().includes(consulta));
+}

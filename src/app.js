@@ -10,7 +10,8 @@ import {
   obtenerResumen,
   esTituloValido,
   filtrarPorEstado,
-  siguienteId
+  siguienteId,
+  buscarPorTexto
 } from "./taskService.js";
 
 const form = document.querySelector("#task-form");
@@ -19,6 +20,7 @@ const list = document.querySelector("#task-list");
 const message = document.querySelector("#message");
 const summary = document.querySelector("#summary");
 const filters = [...document.querySelectorAll("[data-filter]")];
+const searchInput = document.querySelector("#search-input");
 
 let tareas = [
   crearTarea(1, "Revisar requisitos"),
@@ -26,6 +28,7 @@ let tareas = [
   crearTarea(3, "Refactorizar código")
 ];
 let filtro = "todas";
+let busqueda = "";
 
 function crearItem(tarea) {
   const li = document.createElement("li");
@@ -52,7 +55,7 @@ function crearItem(tarea) {
 }
 
 function render() {
-  const visibles = filtrarPorEstado(tareas, filtro);
+  const visibles = buscarPorTexto(filtrarPorEstado(tareas, filtro), busqueda);
   list.replaceChildren(...visibles.map(crearItem));
 
   const { total, pendientes, terminadas } = obtenerResumen(tareas);
@@ -88,5 +91,10 @@ filters.forEach((button) =>
     render();
   })
 );
+
+searchInput.addEventListener("input", () => {
+  busqueda = searchInput.value;
+  render();
+});
 
 render();
