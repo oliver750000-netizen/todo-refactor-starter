@@ -129,7 +129,7 @@ La prueba que más confianza nos dio fue la de `cambiarEstado`, porque verifica 
 ## Pair Programming
 
 Registra por misión quién fue **Driver** y quién **Navigator**. Intercambien roles con frecuencia y no hagan commit hasta que ambos puedan explicar el código y la prueba.
-
+git 
 | Misión | Driver | Navigator |
 |---|---|---|
 | 0 · Comprender antes de cambiar | Laura Beatriz Ruiz Oros | Oliver |
